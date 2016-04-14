@@ -146,7 +146,7 @@ function! over#command_line#getline()
 endfunction
 
 function! over#command_line#setline(line)
-	return s:main.set(a:line)
+	return s:main.setline(a:line)
 endfunction
 
 function! over#command_line#char()

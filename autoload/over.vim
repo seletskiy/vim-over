@@ -46,15 +46,15 @@ endfunction
 
 " http://d.hatena.ne.jp/thinca/20131104/1383498883
 " {range}s/{pattern}/{string}/{flags}
-function! s:parse_substitute(word)
-	let very_magic   = '\v'
-	let range        = '(.{-})'
-	let command      = 's%[ubstitute]'
+function! s:parse_substitute(word, keep_slash)
+	let very_magic	 = '\v'
+	let range		 = '(.{-})'
+	let command		 = 's%[ubstitute]'
 	let first_slash  = '([\x00-\xff]&[^\\"|[:alnum:][:blank:]])'
-	let pattern      = '(%(\\.|.){-})'
+	let pattern		 = '(%(\\.|.){-})'
 	let second_slash = '\2'
-	let string       = '(%(\\.|.){-})'
-	let flags        = '%(\2([&cegiInp#lr]*))?'
+	let string		 = '(%(\\.|.){-})'
+	let flags		 = '%(\2([&cegiInp#lr]*))?'
 	let parse_pattern
 \		= very_magic
 \		. '^:*'
@@ -74,7 +74,10 @@ function! s:parse_substitute(word)
 	if result[0] == '/' || result[0] == '?'
 		return []
 	endif
-	unlet result[1]
+
+	if !a:keep_slash
+		unlet result[1]
+	endif
 	return result
 endfunction
 
@@ -86,9 +89,9 @@ endfunction
 function! over#parse_range(string)
 	let search_pattern = '\v/[^/]*\\@<!%(\\\\)*/|\?[^?]*\\@<!%(\\\\)*\?'
 	let line_specifier =
-	\   '\v%(\d+|[.$]|''\S|\\[/?&])?%([+-]\d*|' . search_pattern . ')*'
+	\	'\v%(\d+|[.$]|''\S|\\[/?&])?%([+-]\d*|' . search_pattern . ')*'
 	let range_pattern = '\v%((\%|' . line_specifier . ')' .
-	\              '%([;,](' . line_specifier . '))*)'
+	\			   '%([;,](' . line_specifier . '))*)'
 	return matchlist(a:string, range_pattern)
 endfunction
 
@@ -115,7 +118,7 @@ function! s:set_options()
 	endif
 
 	let s:old_incsearch = &incsearch
-	let s:old_hlsearch  = &hlsearch
+	let s:old_hlsearch	= &hlsearch
 	let s:old_search_pattern = @/
 endfunction
 
@@ -140,7 +143,7 @@ function! s:restore_options()
 		call feedkeys("\<Plug>(over-restore-nohlsearch)")
 	endif
 	execute "normal \<Plug>(over-restore-search-pattern)"
-" 	call s:silent_feedkeys(":let @/ = " . string(s:old_search_pattern) . "\<CR>", "restore-search-pattern", 'n')
+"	call s:silent_feedkeys(":let @/ = " . string(s:old_search_pattern) . "\<CR>", "restore-search-pattern", 'n')
 endfunction
 
 
@@ -168,8 +171,13 @@ function! over#command_line(prompt, input)
 endfunction
 
 
-function! over#parse_substitute(word)
-	return s:parse_substitute(a:word)
+function! over#parse_substitute(word, ...)
+	if a:0 > 0
+		let keep_slash = 1
+	else
+		let keep_slash = 0
+	endif
+	return s:parse_substitute(a:word, keep_slash)
 endfunction
 
 

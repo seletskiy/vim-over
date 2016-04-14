@@ -195,7 +195,7 @@ function! s:base.connect(module, ...)
 	else
 		let slot.slot.module = a:module
 	endif
-" 	let self.variables.modules[name] = a:module
+"	let self.variables.modules[name] = a:module
 endfunction
 
 
@@ -203,7 +203,7 @@ function! s:base.disconnect(name)
 	return self.variables.modules.disconnect_by(
 \		"get(v:val.slot, 'name', '') == " . string(a:name)
 \	)
-" 	unlet self.variables.modules[a:name]
+"	unlet self.variables.modules[a:name]
 endfunction
 
 
@@ -216,7 +216,7 @@ endfunction
 function! s:base.callevent(event)
 	call self.variables.modules.sort_by("has_key(v:val.slot.module, 'priority') ? v:val.slot.module.priority('" . a:event . "') : 0")
 	return self.variables.modules.call(a:event, [self])
-" 	call map(filter(copy(self.variables.modules), "has_key(v:val, a:event)"), "v:val." . a:event . "(self)")
+"	call map(filter(copy(self.variables.modules), "has_key(v:val, a:event)"), "v:val." . a:event . "(self)")
 endfunction
 
 
@@ -248,6 +248,7 @@ endfunction
 
 
 function! s:base.execute(...)
+	call self.callevent("on_execute_pre")
 	let command = get(a:, 1, self.getline())
 	call self.__execute(command)
 endfunction
@@ -280,8 +281,8 @@ function! s:base.is_enable_keymapping()
 endfunction
 
 " function! s:base.cancel()
-" 	call self.exit(1)
-" 	call self.__on_cancel()
+"	call self.exit(1)
+"	call self.__on_cancel()
 " endfunction
 
 
@@ -421,7 +422,6 @@ endfunction
 
 
 function! s:base.__execute(command)
-	call self.callevent("on_execute_pre")
 	try
 		call self.__execute__(a:command)
 	catch
@@ -513,17 +513,17 @@ endfunction
 
 
 function! s:base.__update()
-" 	call self.callevent("on_update")
-" 	if !getchar(1)
-" 		continue
-" 	endif
+"	call self.callevent("on_update")
+"	if !getchar(1)
+"		continue
+"	endif
 "
-" 	call self.__input(s:getchar(0))
-" 	call self.draw()
+"	call self.__input(s:getchar(0))
+"	call self.draw()
 
 	call self.callevent("on_update")
 	call self.__inputting()
-" 	call self.__input(s:Input.getchar())
+"	call self.__input(s:Input.getchar())
 	if self.is_exit()
 		return -1
 	endif
@@ -575,7 +575,7 @@ endfunction
 
 function! s:base.__get_keymapping()
 	let result = {}
-" 	for module in values(self.variables.modules)
+"	for module in values(self.variables.modules)
 	for module in self.variables.modules.slots()
 		if has_key(module, "keymapping")
 			if module isnot self

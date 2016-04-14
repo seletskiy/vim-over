@@ -5,6 +5,7 @@ set cpo&vim
 let g:over#command_line#search#enable_incsearch = get(g:, "over#command_line#search#enable_incsearch", 1)
 let g:over#command_line#search#enable_move_cursor = get(g:, "over#command_line#search#enable_move_cursor", 0)
 let g:over#command_line#search#keep_search = get(g:, "over#command_line#search#keep_search", 1)
+let g:over#command_line#search#very_magic = get(g:, "over#command_line#search#very_magic", 1)
 
 let s:pattern = ''
 
@@ -55,6 +56,10 @@ function! s:main()
 \	|| line =~ '^?.\+'
 
 		let s:pattern = matchstr(line, '^\(/\|?\)\zs.\+')
+
+		if g:over#command_line#search#very_magic
+			let s:pattern = '\v' . s:pattern
+		endif
 
 		if visual
 			let s:pattern = over#command_line#bind_pattern_by_visual(

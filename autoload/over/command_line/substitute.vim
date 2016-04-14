@@ -1,4 +1,5 @@
 scriptencoding utf-8
+
 let s:save_cpo = &cpo
 set cpo&vim
 
@@ -70,6 +71,7 @@ function! s:finish()
 	if &modifiable == 0 || s:finished
 		return
 	endif
+
 	call s:reset_match()
 	let s:finished = 1
 " 	call setpos(".", s:old_pos)
@@ -165,7 +167,7 @@ function! s:substitute_preview(line)
 	endif
 
 	if over#command_line#is_input("\<CR>")
-		return
+        return
 	endif
 
 	call s:undo()
@@ -182,6 +184,10 @@ function! s:substitute_preview(line)
 	if empty(pattern)
 		let pattern = @/
 	endif
+
+    if g:over#command_line#search#very_magic
+        let pattern = '\v' . pattern
+    endif
 
 	if range == "'<,'>"
 		let pattern = over#command_line#bind_pattern_by_visual(

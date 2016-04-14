@@ -62,7 +62,7 @@ function! s:search.execute(cmdline)
 	call s:silent_feedkeys(":call histdel('/', -1)\<CR>", "remove_hist", "n")
 	let cmd = printf("call s:silent_feedkeys(\"%s%s\<CR>\", 'search', 'n')", self.prefix, input)
 	try
-		execute cmd
+        execute cmd
 	catch
 		echohl ErrorMsg
 		echom matchstr(v:exception, 'Vim\((\w*)\)\?:\zs.*\ze')
