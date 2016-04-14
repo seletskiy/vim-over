@@ -131,6 +131,8 @@ Default: >
 g:over#command_line#keep_search  	*g:over#command_line#keep_search*
   Populate @/ after searching or substitute through OverCommandLine.
 
+g:over#command_line#search#very_magic  	*g:over#command_line#search#very_magic*
+  Use \v in search and substitute by default.
 
 ==============================================================================
 HIGHLIGHT SETTINGS                            *over-command_line-highlight*
