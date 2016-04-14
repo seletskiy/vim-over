@@ -6,6 +6,8 @@ let g:over#command_line#search#enable_incsearch = get(g:, "over#command_line#sea
 let g:over#command_line#search#enable_move_cursor = get(g:, "over#command_line#search#enable_move_cursor", 0)
 let g:over#command_line#search#keep_search = get(g:, "over#command_line#search#keep_search", 1)
 
+let s:pattern = ''
+
 
 function! over#command_line#search#load()
 	" load
