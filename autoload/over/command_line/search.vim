@@ -57,8 +57,10 @@ function! s:main()
 
 		let s:pattern = matchstr(line, '^\(/\|?\)\zs.\+')
 
-		if g:over#command_line#search#very_magic
-			let s:pattern = '\v' . s:pattern
+		if g:over#command_line#search#very_magic && s:pattern != ''
+            if s:pattern[:1] != '\v'
+                let s:pattern = '\v' . s:pattern
+            endif
 		endif
 
 		if visual

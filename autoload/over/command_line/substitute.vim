@@ -183,11 +183,13 @@ function! s:substitute_preview(line)
 	let [range, pattern, string, flags] = result
 	if empty(pattern)
 		let pattern = @/
+    else
+        if g:over#command_line#search#very_magic
+            if pattern[:1] != '\v'
+                let pattern = '\v' . pattern
+            endif
+        endif
 	endif
-
-    if g:over#command_line#search#very_magic
-        let pattern = '\v' . pattern
-    endif
 
 	if range == "'<,'>"
 		let pattern = over#command_line#bind_pattern_by_visual(
