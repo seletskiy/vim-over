@@ -11,6 +11,10 @@ function! s:module.on_execute_pre(cmdline)
 	let result = over#parse_substitute(line, 1)
 	if result != []
 		let [range, slash,pattern, string, flags] = result
+		if pattern == ""
+			return
+		endif
+
 		if g:over#command_line#search#very_magic
 			let pattern = '\v' . pattern
 		endif
@@ -19,7 +23,6 @@ function! s:module.on_execute_pre(cmdline)
 	endif
 
 	if line =~ '^/.\+' || line =~ '^?.\+'
-
 		if g:over#command_line#search#very_magic
 			let line = line[0] . '\v' . line[1:]
 		endif
@@ -28,8 +31,30 @@ function! s:module.on_execute_pre(cmdline)
 	endif
 endfunction
 
+function! s:module.on_leave(cmdline)
+	let line = a:cmdline.getline()
+	let result = over#parse_substitute(line, 1)
+	if result != []
+		let [range, slash, pattern, string, flags] = result
+		if pattern == ""
+			return
+		endif
+
+		if g:over#command_line#search#very_magic
+			call a:cmdline.setline(
+				\ range . "s" . slash . pattern[2:] . slash . string . slash . flags)
+		endif
+	endif
+
+	if line =~ '^/.\+' || line =~ '^?.\+'
+		if g:over#command_line#search#very_magic
+			call a:cmdline.setline(line[0] . line[3:])
+		endif
+	endif
+endfunction
+
 function s:module.priority(...)
-	return 1000
+	return -1000
 endfunction
 
 

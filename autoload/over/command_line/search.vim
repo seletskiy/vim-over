@@ -82,10 +82,6 @@ function! s:main()
 				silent! call search(s:pattern, "b")
 			endif
 		endif
-
-        if s:pattern[:1] == '\v'
-            let s:pattern = s:pattern[2:]
-        endif
 	endif
 endfunction
 
